@@ -33,8 +33,8 @@ This is the end.
 	// Output:
 	// 	<h2>Hello</h2>
 	// <p>The following is an admonition:</p>
-	// <div class="admonition adm-note">
-	// <div class="adm-title">This is a note</div>
+	// <div class="admonition adm-note" data-admonition="0">
+	//   <div class="adm-title">This is a note</div>
 	//   <div class="adm-body">
 	// <p>The body</p>
 	//   </div>
@@ -54,16 +54,16 @@ Not an admonition
 
 The following is an admonition:
 
-!!!!note 
-The body
+!!!!note
+The body 1
 !!!!
 
 !!! note With title!
-The body
+The body 2
 !!!
 
 !!!!danger With Attributes!{.otherclass}
-The body
+The body 3
 !!!!
 
 This is the end.
@@ -85,22 +85,22 @@ This is the end.
 	// Not an admonition
 	// !!!</p>
 	// <p>The following is an admonition:</p>
-	// <div class="admonition adm-note">
-	// <div class="adm-title"></div>
+	// <div class="admonition adm-note" data-admonition="0">
+	//   <div class="adm-title"></div>
 	//   <div class="adm-body">
-	// <p>The body</p>
+	// <p>The body 1</p>
 	//   </div>
 	// </div>
-	// <div class="admonition adm-note">
-	// <div class="adm-title">With title!</div>
+	// <div class="admonition adm-note" data-admonition="0">
+	//   <div class="adm-title">With title!</div>
 	//   <div class="adm-body">
-	// <p>The body</p>
+	// <p>The body 2</p>
 	//   </div>
 	// </div>
-	// <div class="admonition adm-danger otherclass">
-	// <div class="adm-title">With Attributes!</div>
+	// <div class="admonition adm-danger otherclass" data-admonition="0">
+	//   <div class="adm-title">With Attributes!</div>
 	//   <div class="adm-body">
-	// <p>The body</p>
+	// <p>The body 3</p>
 	//   </div>
 	// </div>
 	// <p>This is the end.</p>
@@ -137,12 +137,12 @@ and finally the outer one:
 	// Output:
 	// <h2>Hello</h2>
 	// <p>The following contains an id and a class</p>
-	// <div id="big-div" class="admonition adm-note add-border">
-	// <div class="adm-title">This is a note</div>
+	// <div id="big-div" class="admonition adm-note add-border" data-admonition="0">
+	//   <div class="adm-title">This is a note</div>
 	//   <div class="adm-body">
 	// <p>And the next admonition contains two classes.</p>
-	// <div class="admonition adm-danger background-green font-big">
-	// <div class="adm-title">And this is danger</div>
+	// <div class="admonition adm-danger background-green font-big" data-admonition="1">
+	//   <div class="adm-title">And this is danger</div>
 	//   <div class="adm-body">
 	// <h2>This is nested within nested admonitions</h2>
 	// <p>here we close the inner admonition:</p>
