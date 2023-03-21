@@ -83,3 +83,26 @@ This is the end.
   markdown.Renderer().Render(os.Stdout, src, doc)
 }
 ```
+
+## Indented Style
+
+Instead of opening and closing blocks, i.e.
+
+```markdown
+!!!note This is a note
+   
+   This is the body
+!!!
+
+and this isn't
+```
+
+you can also use indentation for compatibility with markdown-it:
+
+```markdown
+!!!note This is a note
+   
+   this is the body
+
+and this isn't
+```

@@ -224,13 +224,23 @@ func (b *admonitionParser) Continue(node ast.Node, reader text.Reader, pc parser
 	// * Either the indentation is below the indentation of the opening tags
 	// * or it is at the level of the opening tags but the content was indented
 	// * or there is a closing tag and we're in the deepest admonition block
-	// indentClose :=
-	// 	!util.IsBlank(line) &&
-	// 		(w < fdata.indent || (w == fdata.indent && fdata.contentIndent > 0))
-	close, newline := hasClosingTag(line, w, pos, fdata)
+	indentClose :=
+		!util.IsBlank(line) &&
+			(w < fdata.indent || (w < fdata.contentIndent))
 
+	if indentClose {
+		node.SetAttributeString("data-admonition", []byte(fmt.Sprint(flevel)))
+
+		fdataMap = fdataMap[:flevel]
+		pc.Set(admonitionInfoKey, fdataMap)
+
+		return parser.Close
+	}
+
+	close, newline := hasClosingTag(line, w, pos, fdata)
 	if close && flevel == len(fdataMap)-1 {
 		reader.Advance(segment.Stop - segment.Start - newline + segment.Padding)
+
 		node.SetAttributeString("data-admonition", []byte(fmt.Sprint(flevel)))
 
 		fdataMap = fdataMap[:flevel]
