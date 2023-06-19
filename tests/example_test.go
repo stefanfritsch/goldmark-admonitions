@@ -152,3 +152,44 @@ and finally the outer one:
 	//   </div>
 	// </div>
 }
+
+// Tested for a bug where the closing !!!! was in the output
+func Example_toomanybangs() {
+	src := []byte(`
+### Admonitions
+
+You can add
+
+!!!!note Important notes
+    Notes inside admonitions
+    
+` + "    ```R" + `
+    and <- code("blocks")
+` + "    ```" + `
+!!!!
+
+as well as
+`)
+
+	markdown := goldmark.New(
+		goldmark.WithExtensions(
+			&admonitions.Extender{},
+		),
+	)
+
+	doc := markdown.Parser().Parse(text.NewReader(src))
+	markdown.Renderer().Render(os.Stdout, src, doc)
+
+	// Output:
+	// <h3>Admonitions</h3>
+	// <p>You can add</p>
+	// <div class="admonition adm-note" data-admonition="0">
+	//   <div class="adm-title">Important notes</div>
+	//   <div class="adm-body">
+	// <p>Notes inside admonitions</p>
+	// <pre><code class="language-R">and &lt;- code(&quot;blocks&quot;)
+	// </code></pre>
+	//   </div>
+	// </div>
+	// <p>as well as</p>
+}

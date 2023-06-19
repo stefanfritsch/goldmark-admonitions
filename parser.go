@@ -196,6 +196,13 @@ func (b *admonitionParser) Continue(node ast.Node, reader text.Reader, pc parser
 	// 	Get admonition for current admonition
 	rawdata := pc.Get(admonitionInfoKey)
 	fdataMap := rawdata.([]*admonitionData)
+
+	// This should not happen
+	if len(fdataMap) == 0 {
+		fmt.Printf("we're in an admonition block but have no state data. This should not happen")
+		return parser.Close
+	}
+
 	var fdata *admonitionData
 	var flevel int
 	for flevel = 0; flevel < len(fdataMap); flevel++ {
@@ -224,11 +231,10 @@ func (b *admonitionParser) Continue(node ast.Node, reader text.Reader, pc parser
 	// * Either the indentation is below the indentation of the opening tags
 	// * or it is at the level of the opening tags but the content was indented
 	// * or there is a closing tag and we're in the deepest admonition block
-	indentClose :=
-		!util.IsBlank(line) &&
-			(w < fdata.indent || (w < fdata.contentIndent))
+	close, newline := hasClosingTag(line, w, pos, fdata)
+	if close && flevel == len(fdataMap)-1 {
+		reader.Advance(segment.Stop - segment.Start - newline + segment.Padding)
 
-	if indentClose {
 		node.SetAttributeString("data-admonition", []byte(fmt.Sprint(flevel)))
 
 		fdataMap = fdataMap[:flevel]
@@ -237,10 +243,11 @@ func (b *admonitionParser) Continue(node ast.Node, reader text.Reader, pc parser
 		return parser.Close
 	}
 
-	close, newline := hasClosingTag(line, w, pos, fdata)
-	if close && flevel == len(fdataMap)-1 {
-		reader.Advance(segment.Stop - segment.Start - newline + segment.Padding)
+	indentClose :=
+		!util.IsBlank(line) &&
+			(w < fdata.indent || (w == fdata.indent && w < fdata.contentIndent))
 
+	if indentClose {
 		node.SetAttributeString("data-admonition", []byte(fmt.Sprint(flevel)))
 
 		fdataMap = fdataMap[:flevel]
